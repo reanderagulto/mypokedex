@@ -1,13 +1,14 @@
-import { useState } from 'react'
-import './App.css'
+import Home from "@/views/Home";
+import SiteHeader from "./components/global/SiteHeader";
+import '@css/header.css';
 
-function App() {
-    const [count, setCount] = useState(0)
-
+const App = () => {
     return (
         <>
+            <SiteHeader />
+            <Home />
         </>
     )
 }
 
-export default App
+export default App;

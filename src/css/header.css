@@ -1,0 +1,3 @@
+.header__inner-wrapper {
+    @apply py-[24px] flex items-center mx-auto w-full max-w-[900px] text-[#FFFFFF] text-[32px] font-[500] gap-[1rem];
+}

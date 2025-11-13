@@ -31,6 +31,9 @@
             "@css/*": [
                 "./src/css/*"
             ],
+            "@api/*": [
+                "./src/api/*"
+            ]
         }
     },
     "include": ["src"]

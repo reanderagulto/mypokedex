@@ -1,4 +1,5 @@
 import {
+    useCallback,
     useEffect,
     useState
 } from 'react';
@@ -8,8 +9,14 @@ import {
 } from '@api/api';
 import { 
     Drawer, 
-    DrawerContent 
+    DrawerContent,
+    DrawerHeader, 
+    DrawerTitle,
+    DrawerDescription
 } from "@/components/ui/drawer";
+import {
+    titleCase
+} from '@lib/utils';
 
 const PokemonInfo = ({
     id = '', 
@@ -22,17 +29,41 @@ const PokemonInfo = ({
 
     const fetchPokemonInfo = async() => {
         const data = await getPokemonByName(name);
-        setPokemonData(data)
+        setPokemonData(data);
     }
 
+    console.log(pokemonData);
+    
+
     useEffect(() => {
-        fetchPokemonInfo();
-    }, []);
+        if (isOpen) {
+            fetchPokemonInfo();
+        }
+    }, [isOpen, name]);
 
     return (
-        <div>
-
-        </div>
+        <Drawer 
+            open={isOpen} 
+            onOpenChange={setOpen}
+        >
+            <DrawerContent
+                className={`pokemon-info`}
+            >
+                <DrawerHeader className="pokemon-info__header">
+                    <DrawerTitle className="pokemon-info__title">
+                        <span>{`#${id}`}</span>
+                        {titleCase(name)}
+                    </DrawerTitle>
+                    <div className="pokemon-info__image">
+                        <img 
+                            src={image} 
+                            alt={`${titleCase(name)} Image`} 
+                            className="pokemon-info__image"
+                        />
+                    </div>
+                </DrawerHeader>
+            </DrawerContent>
+        </Drawer>
     )
 }
 

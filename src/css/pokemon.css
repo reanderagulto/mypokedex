@@ -31,3 +31,23 @@
 .pokemon-card__name {
     @apply text-md leading-normal block text-center font-semibold;
 }
+
+.pokemon-info {
+
+}
+
+.pokemon-info__header {
+    @apply mb-5 md:mb-10;
+}
+
+.pokemon-info__title {
+    @apply text-lg text-center leading-normal block font-bold mb-0;
+}
+
+.pokemon-info__title span {
+    @apply block text-sm leading-normal text-gray-500;
+}
+
+.pokemon-info__image {
+    @apply mx-auto w-[250px] h-[250px] sm:w-[300px] sm:h-[300px] transition-all;
+}

@@ -7,9 +7,9 @@ const http = axios.create({
     baseURL: import.meta.env.VITE_APP_URL
 });
 
-export const getAllPokemon = async (limit = 12) => {
+export const getAllPokemon = async (limit = 12, offset = 0) => {
     const res = await http.get(
-        `${apiUrl}/pokemon?limit=${limit}`
+        `${apiUrl}/pokemon?limit=${limit}&offset=${offset}`
     );
     const pokemons  = res.data.results.map((data: any) => {
         const id = data.url.split("/")[data.url.split("/").length - 2];
@@ -42,7 +42,7 @@ export const getGenerationById = async (id: number) => {
     return data;
 }
 
-export const getPokemonByID = async (name: string) => {
+export const getPokemonByName = async (name: string) => {
     const res = await http.get(
         `${apiUrl}/pokemon/${name}`
     );

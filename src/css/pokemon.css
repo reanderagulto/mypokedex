@@ -1,0 +1,33 @@
+@reference './global.css';
+
+.pokemon-list {
+    @apply flex items-stretch flex-wrap justify-between gap-[32px] w-[80%] max-w-[900px] mx-auto mt-[65px] mb-[65px];
+}
+
+.pokemon-card {
+    @apply relative md:w-[calc(calc(100%/3)-32px)] w-full flex flex-col flex-grow cursor-pointer transition-all;
+}
+
+.pokemon-card:hover {
+    @apply shadow-2xl;    
+}
+
+.pokemon-card:hover .pokemon-card__image {
+    @apply scale-125;        
+}
+
+.pokemon-card .bg-card {
+    @apply py-3;
+}
+
+.pokemon-card__image {
+    @apply mx-auto w-[100px] h-[100px] transition-all;
+}
+
+.pokemon-card__number {
+    @apply absolute -top-2 left-[12px] text-xs;
+}
+
+.pokemon-card__name {
+    @apply text-md leading-normal block text-center font-semibold;
+}

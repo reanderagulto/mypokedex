@@ -3,7 +3,46 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme inline {
+@theme {
+    /* Breakpoints */
+  --breakpoint-xsm: 375px;
+  --breakpoint-sm: 540px;
+  --breakpoint-md: 991px;
+  --breakpoint-lg: 1199px;
+  --breakpoint-xxl: 1360px;
+  
+  /* Colors */
+  --color-primary: #B3BCBB;
+  --color-secondary: #99BCC0;
+  --color-tertiary: #C36868;
+  --color-black: #000000;
+  --color-white: #FFFFFF;
+
+  /* Fonts */
+  --font-roboto-mono: "Roboto Mono", monospace;
+
+  /* Font sizes */
+  --text-sm: 1rem;
+  --text-md: 1.5rem;
+  --text-lg: 2rem;
+  --text-xl: 5.625rem;
+
+  --text-sm--line-height: normal;
+  --text-md--line-height: normal;
+  --text-lg--line-height: normal;
+  --text-xl--line-height: 92.9%;
+
+  --text-sm--font-weight: 400;
+  --text-md--font-weight: 500;
+  --text-lg--font-weight: 500;
+  --text-xl--font-weight: 700;
+
+  /* Border radius */
+  --radius: 1.25rem;
+
+  /* Container padding */
+  --container-padding: 1rem;
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -118,4 +157,3 @@
     @apply bg-background text-foreground;
   }
 }
-

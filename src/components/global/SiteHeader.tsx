@@ -3,13 +3,15 @@ import '@css/header.css';
 
 const SiteHeader = () => {
     return (
-        <header className="bg-red-500">
+        <header>
             <div className="header__inner-wrapper">
-                <img 
-                    src={pokeball} 
-                    alt="logo" 
-                />
-                Pokedex
+                <div className="header__logo">
+                    <img 
+                        src={pokeball} 
+                        alt="logo" 
+                    />
+                    Pokedex
+                </div>
             </div>
         </header>
     )

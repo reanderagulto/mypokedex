@@ -1,7 +1,5 @@
-.pokemon-list {
-    @apply flex items-stretch flex-wrap justify-between gap-[8px] w-full max-w-[900px] mx-auto mt-[65px];
-}
+@reference './global.css';
 
-.pokemon-card {
-    @apply w-full md:w-[calc(calc(100%/3)-8px)] flex-grow;
+.pokemon-wrapper {
+    @apply mt-[160px] z-30 relative;
 }

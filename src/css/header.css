@@ -1,3 +1,13 @@
+@reference './global.css';
+
+header {
+    @apply bg-tertiary fixed w-full top-0 z-50;
+}
+
 .header__inner-wrapper {
-    @apply py-[24px] flex items-center mx-auto w-full max-w-[900px] text-[#FFFFFF] text-[32px] font-[500] gap-[1rem];
+    @apply py-[24px] flex items-center justify-between mx-auto px-4 w-full max-w-[900px] text-white text-[32px] font-[500] gap-[1rem];
+}
+
+.header__logo {
+    @apply flex items-center gap-[1rem];
 }

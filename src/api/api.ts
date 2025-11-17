@@ -48,10 +48,8 @@ export const getPokemonByName = async (name: string) => {
     );
     const types = res.data.types.map((item: any) => {
         const name = item.type.name;
-        const color = `bg-${item.type.name}`;
         return {
-            name,
-            color
+            name
         }
     });
     const data = {...res.data, types};

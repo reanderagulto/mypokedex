@@ -1,4 +1,5 @@
 import {
+    useEffect,
     useState
 } from 'react';
 
@@ -6,12 +7,22 @@ import {
     Card,
     CardContent,
 } from "@/components/ui/card";
+
+import {
+    getPokemonByName
+} from '@api/api';
+
 import {
     titleCase
 } from '@lib/utils';
-import type { PokemonCardProps } from '@/types/pokemon.type';
-import '@css/pokemon.css';
+
+import type { 
+    PokemonCardProps,
+    PokemonTypes
+} from '@/types/pokemon.type';
 import PokemonInfo from './PokemonInfo';
+
+import '@css/pokemon.css';
 
 const PokemonCard = ({
     id = '',
@@ -19,6 +30,12 @@ const PokemonCard = ({
     image = ''
 }: PokemonCardProps) => {
     const [open, setOpen] = useState(false);
+    const [pokemonData, setPokemonData] = useState();
+
+    const fetchData = async(name: string) => {
+        const data = await getPokemonByName(name);
+        setPokemonData(data);
+    }
 
     const handleSetOpen = (state: boolean) => {
         setOpen(state);
@@ -29,7 +46,8 @@ const PokemonCard = ({
             <Card 
                 className="pokemon-card"
                 onClick={() => {
-                    handleSetOpen(true)
+                    fetchData(id);
+                    handleSetOpen(true);
                 }}
             >
                 <CardContent className="relative">
@@ -47,6 +65,7 @@ const PokemonCard = ({
                 name={name}
                 image={image}
                 isOpen={open}
+                data={pokemonData}
                 setOpen={handleSetOpen}
             />
         </>

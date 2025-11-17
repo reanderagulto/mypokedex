@@ -18,6 +18,25 @@
   --color-black: #000000;
   --color-white: #FFFFFF;
 
+  --color-dark: #707070; 
+  --color-electric: #EED535;
+  --color-fighting: #D56723;
+  --color-flying: #3DC7EF;
+  --color-grass: #9BCC50;
+  --color-ice: #51C4E7;
+  --color-poison: #B97FC9;
+  --color-rock: #A38C21;
+  --color-water: #4592C4;
+  --color-fire: #F57D31;
+  --color-bug: #729f3f;
+  --color-dragon: #53a4cf;
+  --color-fairy: #fdb9e9;
+  --color-ghost: #7b62a3;
+  --color-ground: #f7de3f;
+  --color-normal: #a4acaf;
+  --color-psychic: #f366b9;
+  --color-steel: #9eb7b8;
+
   /* Fonts */
   --font-roboto-mono: "Roboto Mono", monospace;
 

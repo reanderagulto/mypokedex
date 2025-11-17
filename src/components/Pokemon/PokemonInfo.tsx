@@ -1,19 +1,18 @@
+import type { 
+    PokemonInfoProps 
+} from '@/types/pokemon.type';
+
 import {
-    useCallback,
-    useEffect,
-    useState
-} from 'react';
-import type { PokemonInfoProps } from '@/types/pokemon.type';
-import {
-    getPokemonByName
-} from '@api/api';
+    typeColors
+} from '@/types/pokemon.type';
+
 import { 
     Drawer, 
     DrawerContent,
     DrawerHeader, 
-    DrawerTitle,
-    DrawerDescription
+    DrawerTitle
 } from "@/components/ui/drawer";
+
 import {
     titleCase
 } from '@lib/utils';
@@ -22,24 +21,10 @@ const PokemonInfo = ({
     id = '', 
     name = '', 
     image = '',
+    data,
     isOpen = false, 
     setOpen
  }: PokemonInfoProps) => {
-    const [pokemonData, setPokemonData] = useState();
-
-    const fetchPokemonInfo = async() => {
-        const data = await getPokemonByName(name);
-        setPokemonData(data);
-    }
-
-    console.log(pokemonData);
-    
-
-    useEffect(() => {
-        if (isOpen) {
-            fetchPokemonInfo();
-        }
-    }, [isOpen, name]);
 
     return (
         <Drawer 
@@ -51,8 +36,18 @@ const PokemonInfo = ({
             >
                 <DrawerHeader className="pokemon-info__header">
                     <DrawerTitle className="pokemon-info__title">
-                        <span>{`#${id}`}</span>
+                        <span className="pokemon-info__number">{`#${id}`}</span>
                         {titleCase(name)}
+                        <div className="flex items-center justify-center pokemon-info__types">
+                            {data?.types.map((item: any, index: any) => (
+                                <span 
+                                    key={index} 
+                                    className={`pokemon-info__badge ${typeColors[item?.name]}`}
+                                >
+                                    {titleCase(item.name)}
+                                </span>
+                            ))}
+                        </div>
                     </DrawerTitle>
                     <div className="pokemon-info__image">
                         <img 

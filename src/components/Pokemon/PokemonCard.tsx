@@ -17,8 +17,7 @@ import {
 } from '@lib/utils';
 
 import type { 
-    PokemonCardProps,
-    PokemonTypes
+    PokemonCardProps
 } from '@/types/pokemon.type';
 import PokemonInfo from './PokemonInfo';
 

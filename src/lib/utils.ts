@@ -12,3 +12,7 @@ export const titleCase = (s: string) => {
             .map(word => word.charAt(0).toUpperCase() + word.slice(1))
             .join(' ');
 }
+
+export const unitConversion = (figure: number) => {
+    return figure / 10;
+}

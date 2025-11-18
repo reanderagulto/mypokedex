@@ -12,6 +12,9 @@ const SiteHeader = () => {
                     />
                     Pokedex
                 </div>
+                <div className="header__menu">
+                    
+                </div>
             </div>
         </header>
     )

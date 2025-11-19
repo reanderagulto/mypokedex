@@ -11,3 +11,7 @@ header {
 .header__logo {
     @apply flex items-center gap-[1rem];
 }
+
+.header__menu--button {
+    @apply h-6 w-6 cursor-pointer;
+}

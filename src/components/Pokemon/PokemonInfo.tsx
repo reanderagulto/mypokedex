@@ -3,7 +3,8 @@ import type {
 } from '@/types/pokemon.type';
 
 import {
-    typeColors
+    typeColors,
+    darken
 } from '@/types/pokemon.type';
 
 import { 
@@ -39,17 +40,18 @@ const PokemonInfo = ({
  }: PokemonInfoProps) => {
 
     return (
-        <Drawer 
+        <Drawer            
             open={isOpen} 
             onOpenChange={setOpen}
         >
             <DrawerContent
-                className={`pokemon-info`}
+                className={`pokemon-info z-50 ${darken(data?.types[0].name)}`}
             >
-                <ScrollArea className="h-full border-0">
+                <div className="absolute inset-0 bg-black/20 z-30"></div>
+                <ScrollArea className="h-full border-0 relative z-50">
                     <DrawerHeader className="pokemon-info__header">
-                        <DrawerTitle className="pokemon-info__title">
-                            <span className="pokemon-info__number">{`#${id}`}</span>
+                        <DrawerTitle className="text-white pokemon-info__title">
+                            <span className="text-white pokemon-info__number">{`#${id}`}</span>
                             {titleCase(name)}
                             <div className="flex items-center justify-center pokemon-info__types">
                                 {data?.types.map((item: any, index: any) => (
@@ -70,10 +72,10 @@ const PokemonInfo = ({
                             />
                         </div>
                     </DrawerHeader>
-                    <Card className="pokemon-info__content border-0">
-                        <CardHeader className="text-center">About</CardHeader>
+                    <Card className="pokemon-info__content">
+                        <CardHeader className="pokemon-info__section--header text-center">About</CardHeader>
                         <CardContent className="pokemon-info__inner-content">
-                            <div className="flex items-stretch justify-center gap-10 pokemon-info__attribute--list">
+                            <div className="flex items-stretch justify-center gap-4 pokemon-info__attribute--list">
                                 <div className="flex flex-col gap-3 justify-center items-center pokemon-info__attribute">
                                     <span className="flex items-center gap-2">
                                         <img src={IconWeight} alt="Weight Icon" />
@@ -88,6 +90,12 @@ const PokemonInfo = ({
                                     </span>
                                     <span className="text-center">Height</span>
                                 </div>
+                            </div>
+                            <div className="pokemon-info__desc">
+                                
+                            </div>
+                            <div className="pokemon-info__stats">
+                                
                             </div>
                         </CardContent>
                     </Card>

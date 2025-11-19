@@ -52,3 +52,8 @@ export const typeColors: Record<string, string> = {
     psychic: "bg-psychic",
     steel: "bg-steel"
 };
+
+export const darken = (type: string) => {
+    const base = typeColors[type] ?? "";
+    return `${base}`;
+};

@@ -49,13 +49,37 @@
 }
 
 .pokemon-info__image {
-    @apply mx-auto w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] mt-4 transition-all;
+    @apply mx-auto w-[200px] h-[200px] sm:w-[280px] sm:h-[280px] mt-4 transition-all;
 }
 
 .pokemon-info__content {
-    @apply -mt-[50px] pt-[80px] w-[calc(100%-40px)] mx-auto rounded-b-none;
+    @apply -mt-[100px] pt-[80px] w-[calc(100%-40px)] mx-auto rounded-b-none;
 }
 
 .pokemon-info__section--header {
     @apply text-md leading-normal font-semibold;
+}
+
+.pokemon-info__attribute {
+    @apply font-semibold;
+}
+
+.pokemon-info__about--header {
+    @apply text-[#666666] text-[12px];
+}
+
+.pokemon-info__stats {
+    @apply mt-8;
+}
+
+.pokemon-info__stats--wrapper {
+    @apply w-full sm:w-[75%] mx-auto;
+}
+
+.pokemon-info__stats--item {
+    @apply mb-2;
+}
+
+.pokemon-info__stats--item span {
+    @apply text-[#666666] text-[12px] font-semibold mb-3 block;
 }

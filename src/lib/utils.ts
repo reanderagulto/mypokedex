@@ -16,3 +16,10 @@ export const titleCase = (s: string) => {
 export const unitConversion = (figure: number) => {
     return figure / 10;
 }
+
+export function formatStatName(stat: string): string {
+  return stat
+    .split("-")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1)) 
+    .join(" ");
+}

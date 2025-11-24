@@ -12,6 +12,10 @@ header {
     @apply flex items-center gap-[1rem];
 }
 
+.header__menu {
+    @apply flex items-center gap-2;
+}
+
 .header__menu--button {
     @apply h-6 w-6 cursor-pointer;
 }

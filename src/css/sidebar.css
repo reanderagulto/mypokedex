@@ -1,0 +1,5 @@
+@reference './global.css';
+
+.sidebar__group {
+    @apply px-4;
+}

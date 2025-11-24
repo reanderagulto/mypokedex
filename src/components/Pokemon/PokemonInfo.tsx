@@ -40,9 +40,6 @@ const PokemonInfo = ({
     isOpen = false, 
     setOpen
  }: PokemonInfoProps) => {
-
-    console.log(data?.stats);
-
     return (
         <Drawer            
             open={isOpen} 

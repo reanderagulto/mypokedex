@@ -5,7 +5,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-
 export const titleCase = (s: string) => {
     return s.toLowerCase()
             .split(' ')

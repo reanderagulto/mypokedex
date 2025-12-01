@@ -1,16 +1,13 @@
 import {
-    useEffect,
     useState
 } from 'react';
+
+import { usePokemonStore } from "@lib/usePokemonStore";
 
 import { 
     Card,
     CardContent,
 } from "@/components/ui/card";
-
-import {
-    getPokemonByName
-} from '@api/api';
 
 import {
     titleCase
@@ -29,25 +26,26 @@ const PokemonCard = ({
     image = ''
 }: PokemonCardProps) => {
     const [open, setOpen] = useState(false);
-    const [pokemonData, setPokemonData] = useState();
 
-    const fetchData = async(name: string) => {
-        const data = await getPokemonByName(name);
-        setPokemonData(data);
-    }
+    const {
+        pokemonDetails,
+        fetchPokemonByName
+    } = usePokemonStore();
 
-    const handleSetOpen = (state: boolean) => {
-        setOpen(state);
-    }
+    const data = (pokemonDetails as Record<string, any>)[name];
+
+    const handleClick = async () => {
+        // fetch only if not cached
+        if (!pokemonDetails[name]) {
+            await fetchPokemonByName(name);
+        }
+        setOpen(true);
+    };
     
     return (
         <>
             <Card 
-                className="pokemon-card"
-                onClick={() => {
-                    fetchData(id);
-                    handleSetOpen(true);
-                }}
+                className="pokemon-card" onClick={handleClick}
             >
                 <CardContent className="relative">
                     <img 
@@ -64,8 +62,8 @@ const PokemonCard = ({
                 name={name}
                 image={image}
                 isOpen={open}
-                data={pokemonData}
-                setOpen={handleSetOpen}
+                data={data}
+                setOpen={setOpen}
             />
         </>
     )

@@ -1,51 +1,36 @@
 import { 
-    useEffect, 
-    useState 
+    useEffect
 } from "react";
-import {
-    getAllPokemon
-} from '@api/api';
-import type { PokemonProps } from '@/types/pokemon.type';
+
+import { usePokemonStore } from "@lib/usePokemonStore";
+
 import PokemonCard from "./PokemonCard";
-import '@css/pokemon.css';
 import { Button } from "../ui/button";
 
-const LIMIT = 30;
+import '@css/pokemon.css';
 
 const PokemonList = () => {
-    const [allPokemon, setAllPokemon] = useState<PokemonProps>({
-        count: 0,
-        next: null,
-        previous: null,
-        data: []
-    });
-    
-    const [loading, setLoading] = useState(false);
+    const {
+        allPokemon,
+        loading,
+        fetchAllPokemon
+    } = usePokemonStore();
 
-    const fetchPokemon = async () => {
-        setLoading(true);
-
+    const loadPokemon = () => {
         let offset = 0;
+
         if (allPokemon.next) {
             const url = new URL(allPokemon.next);
             offset = Number(url.searchParams.get("offset") || 0);
         }
 
-        const data = await getAllPokemon(LIMIT, offset); // assuming getAllPokemon supports limit & offset
-
-        // Append new data
-        setAllPokemon(prev => ({
-            count: data.count,
-            next: data.next,
-            previous: data.previous,
-            data: [...prev.data, ...data.data]
-        }));
-
-        setLoading(false);
+        fetchAllPokemon(offset);
     };
 
     useEffect(() => {  
-        fetchPokemon();
+        if (allPokemon.data.length === 0) {
+            loadPokemon();
+        }
     }, []);
 
     return (
@@ -63,7 +48,7 @@ const PokemonList = () => {
             {allPokemon.next && (
                 <Button
                     className="mx-auto"
-                    onClick={fetchPokemon}
+                    onClick={loadPokemon}
                     disabled={loading}
                 >
                     Load More

@@ -1,10 +1,7 @@
-import {
-    useEffect,
-    useState
-} from 'react';
-import {
-    getPokemonTypes
-} from '@api/api';
+import { useEffect } from 'react';
+
+import { usePokemonStore } from '@lib/usePokemonStore';
+
 import {
     titleCase
 } from '@/lib/utils';
@@ -14,22 +11,24 @@ import {
 import { Badge } from '../ui/badge';
 
 const PokemonFilterType = () => {
-    const [types, setTypes] = useState();
-        
-    const fetchTypes = async () => {
-        const data = await getPokemonTypes();
-        setTypes(data);
-    }
+    
+    const { 
+        pokemonTypes,
+        fetchPokemonTypes
+    } = usePokemonStore();
 
     useEffect(() => {
-        fetchTypes();
+        // Only fetch if not already cached
+        if (!pokemonTypes || pokemonTypes.length === 0) {
+            fetchPokemonTypes();
+        }
     }, []);
 
     return (
         <div>
             <label className="block mb-3 font-semibold text-sm text-[#000]">Types</label>
             <div className="flex items-center justify-center flex-wrap w-full gap-[12px]">
-                {types?.map((item: any, index: any) => (
+                {pokemonTypes?.map((item: any, index: any) => (
                     <Badge 
                         key={index}
                         className={`w-[calc(50%-12px)] h-[32px] flex-grow ${typeColors[item]}`}

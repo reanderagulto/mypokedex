@@ -1,13 +1,11 @@
-import {
-    useEffect,
-    useState
-} from 'react';
-import {
-    getPokemonAbilities
-} from '@api/api';
+import { useEffect } from 'react';
+
+import { usePokemonStore } from '@lib/usePokemonStore';
+
 import {
     formatStatName
 } from '@/lib/utils';
+
 import { 
     Select, 
     SelectContent, 
@@ -18,15 +16,16 @@ import {
 
 const PokemonFilterAbilities = () => {
 
-    const [abilities, setAbilities] = useState();
-    
-    const fetchAbilities = async () => {
-        const data = await getPokemonAbilities();
-        setAbilities(data);
-    }
+    const { 
+        pokemonAbilities, 
+        fetchPokemonAbilities 
+    } = usePokemonStore();
 
     useEffect(() => {
-        fetchAbilities();
+        // Only fetch if not already cached
+        if (!pokemonAbilities || pokemonAbilities.length === 0) {
+            fetchPokemonAbilities();
+        }
     }, []);
 
     return (
@@ -37,7 +36,7 @@ const PokemonFilterAbilities = () => {
             </SelectTrigger>
             <SelectContent className="max-h-48 overflow-y-auto">
                 <SelectItem value="all">All</SelectItem>
-                {abilities?.map((item: any, index:any) => (
+                {pokemonAbilities?.map((item: any, index:any) => (
                     <SelectItem 
                         key={index}
                         value={item}

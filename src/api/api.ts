@@ -28,6 +28,30 @@ export const getAllPokemon = async (limit = 12, offset = 0) => {
     };
 }
 
+export const getPokemonByType = async (type: string) => {
+    const { data } = await http.get(`${apiUrl}/type/${type}`);
+
+    return data.pokemon.map((p: any) => {
+        const url = p.pokemon.url;
+        const id = url.split("/")[url.split("/").length - 2];
+        const image = `${spriteUrl}/${id}.png`;
+
+        return { id, name: p.pokemon.name, image };
+    });
+};
+
+export const getPokemonByAbility = async (ability: string) => {
+    const { data } = await http.get(`${apiUrl}/ability/${ability}`);
+
+    return data.pokemon.map((p: any) => {
+        const url = p.pokemon.url;
+        const id = url.split("/")[url.split("/").length - 2];
+        const image = `${spriteUrl}/${id}.png`;
+
+        return { id, name: p.pokemon.name, image };
+    });
+};
+
 export const getAllGeneration = async () => {
     const { data } = await http.get(
         `${apiUrl}/generation`

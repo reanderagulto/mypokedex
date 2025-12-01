@@ -18,6 +18,7 @@ type CacheEntry<T> = {
 }
 
 type PokemonStore = {
+    // Defining States
     cache: Record<string, CacheEntry<any>>;
     loading: boolean;
 
@@ -27,6 +28,7 @@ type PokemonStore = {
     pokemonTypes: any[];
     pokemonAbilities: any[];
 
+    // Mutator functions - Para update yung mga states sa taas.
     fetchAllPokemon: (offset?: number) => Promise<void>;
     fetchAllGenerations: () => Promise<void>;
     fetchPokemonByName: (name: string) => Promise<void>;
@@ -35,6 +37,7 @@ type PokemonStore = {
 }
 
 export const usePokemonStore = create<PokemonStore>((set, get) => ({
+    // Default States Values
     cache: {},
     loading: false,
 
@@ -44,6 +47,7 @@ export const usePokemonStore = create<PokemonStore>((set, get) => ({
     pokemonTypes: [],
     pokemonAbilities: [],
 
+    // Mutator Functions - Fetch Data from API and update states
     fetchAllPokemon: async (offset = 0) => {
         const key = `pokemon-list-${LIMIT}-${offset}`;
         const cached = get().cache[key];

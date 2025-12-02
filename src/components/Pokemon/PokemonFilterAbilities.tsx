@@ -18,7 +18,8 @@ const PokemonFilterAbilities = () => {
 
     const { 
         pokemonAbilities, 
-        fetchPokemonAbilities 
+        fetchPokemonAbilities,
+        setFilter
     } = usePokemonStore();
 
     useEffect(() => {
@@ -29,7 +30,15 @@ const PokemonFilterAbilities = () => {
     }, []);
 
     return (
-        <Select>
+        <Select
+            onValueChange={(value) => {
+                if (value === "all") {
+                    setFilter("ability", null);  // clears filter
+                } else {
+                    setFilter("ability", value); // sets ability filter
+                }
+            }}
+        >
             <label className="block font-semibold mb-3 text-sm text-[#000]">Abilities</label>
             <SelectTrigger className="w-full">
                 <SelectValue placeholder="Abilities" />

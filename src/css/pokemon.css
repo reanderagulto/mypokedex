@@ -73,7 +73,7 @@
 }
 
 .pokemon-info__stats--wrapper {
-    @apply w-full sm:w-[75%] mx-auto;
+    @apply w-full sm:w-[30%] mx-auto;
 }
 
 .pokemon-info__stats--item {

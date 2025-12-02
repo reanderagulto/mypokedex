@@ -82,15 +82,13 @@ export const getPokemonByName = async (name: string) => {
 
 export const getPokemonTypes = async () => {
     const { data } = await http.get(
-        `${apiUrl}/type`
+        `${apiUrl}/type?limit=10000`
     );
-    return data.results.map((type: any) => type.name);
+    return data;
 }
 
 export const getPokemonAbilities = async () => {
     const { data } = await http.get(`${apiUrl}/ability?limit=10000`);
     
-    return data.results
-        .map((a: any) => a.name)
-        .sort((a: string, b: string) => a.localeCompare(b));
+    return data;
 };

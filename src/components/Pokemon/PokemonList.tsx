@@ -1,61 +1,57 @@
-import { 
-    useEffect
-} from "react";
-
 import { usePokemonStore } from "@lib/usePokemonStore";
-
 import PokemonCard from "./PokemonCard";
 import { Button } from "../ui/button";
-
-import '@css/pokemon.css';
+import "@css/pokemon.css";
 
 const PokemonList = () => {
     const {
         allPokemon,
+        filteredPokemon,
+        filters,
         loading,
         fetchAllPokemon
     } = usePokemonStore();
 
-    const loadPokemon = () => {
-        let offset = 0;
+    const isFiltering =
+        filters.name ||
+        filters.type !== null ||
+        filters.ability !== null;
 
-        if (allPokemon.next) {
-            const url = new URL(allPokemon.next);
-            offset = Number(url.searchParams.get("offset") || 0);
-        }
+    console.log(filteredPokemon);
 
+    const list = isFiltering ? filteredPokemon : allPokemon.data;
+
+    const loadMore = () => {
+        const next = allPokemon.next;
+        if (!next) return;
+
+        const offset = Number(new URL(next).searchParams.get("offset") || 0);
         fetchAllPokemon(offset);
     };
 
-    useEffect(() => {  
-        if (allPokemon.data.length === 0) {
-            loadPokemon();
-        }
-    }, []);
-
     return (
         <div className="pokemon-list">
-            {allPokemon?.data?.map((item:any, index:any) => {
-                return (
-                    <PokemonCard 
-                        id={item.id}
-                        name={item.name}
-                        image={item.image}
-                        key={index}
-                    />
-                );
-            })}
-            {allPokemon.next && (
+            {list.map((p: any, i: number) => (
+                <PokemonCard
+                    key={p.id || i}
+                    id={p.id}
+                    name={p.name}
+                    image={p.image}
+                />
+            ))}
+
+            {/* Load More only when NOT filtering */}
+            {!isFiltering && allPokemon.next && (
                 <Button
                     className="mx-auto"
-                    onClick={loadPokemon}
+                    onClick={loadMore}
                     disabled={loading}
                 >
-                    Load More
+                    {loading ? "Loading..." : "Load More"}
                 </Button>
             )}
         </div>
-    )
-}
+    );
+};
 
-export default PokemonList
+export default PokemonList;

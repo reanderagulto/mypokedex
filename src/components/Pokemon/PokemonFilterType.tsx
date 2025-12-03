@@ -11,18 +11,9 @@ import {
 import { Badge } from '../ui/badge';
 
 const PokemonFilterType = () => {
-    
     const { 
-        pokemonTypes,
-        fetchPokemonTypes
+        pokemonTypes
     } = usePokemonStore();
-
-    useEffect(() => {
-        // Only fetch if not already cached
-        if (!pokemonTypes || pokemonTypes.length === 0) {
-            fetchPokemonTypes();
-        }
-    }, []);
 
     return (
         <div>

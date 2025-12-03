@@ -1,61 +1,55 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
+import { usePokemonStore } from "@lib/usePokemonStore";
 
-import { usePokemonStore } from '@lib/usePokemonStore';
+import { formatStatName } from "@/lib/utils";
 
 import {
-    formatStatName
-} from '@/lib/utils';
-
-import { 
-    Select, 
-    SelectContent, 
-    SelectItem, 
-    SelectTrigger, 
-    SelectValue 
-} from '../ui/select';
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "../ui/select";
 
 const PokemonFilterAbilities = () => {
-
-    const { 
-        pokemonAbilities, 
-        fetchPokemonAbilities,
-        setFilter
+    const {
+        pokemonAbilities,
+        setFilter,
+        filters
     } = usePokemonStore();
 
-    useEffect(() => {
-        // Only fetch if not already cached
-        if (!pokemonAbilities || pokemonAbilities.length === 0) {
-            fetchPokemonAbilities();
-        }
-    }, []);
-
     return (
-        <Select
-            onValueChange={(value) => {
-                if (value === "all") {
-                    setFilter("ability", null);  // clears filter
-                } else {
-                    setFilter("ability", value); // sets ability filter
-                }
-            }}
-        >
-            <label className="block font-semibold mb-3 text-sm text-[#000]">Abilities</label>
-            <SelectTrigger className="w-full">
-                <SelectValue placeholder="Abilities" />
-            </SelectTrigger>
-            <SelectContent className="max-h-48 overflow-y-auto">
-                <SelectItem value="all">All</SelectItem>
-                {pokemonAbilities?.map((item: any, index:any) => (
-                    <SelectItem 
-                        key={index}
-                        value={item}
-                    >
-                        {formatStatName(item)}
-                    </SelectItem>
-                ))}
-            </SelectContent>
-        </Select>
-    )
-}
+        <div>
+            <label className="block font-semibold mb-3 text-sm text-[#000]">
+                Abilities
+            </label>
 
-export default PokemonFilterAbilities
+            <Select
+                value={filters.ability ?? "all"}   // 🔥 keeps Select in sync with Zustand
+                onValueChange={(value) => {
+                    if (value === "all") {
+                        setFilter("ability", null);   // clear filter
+                    } else {
+                        setFilter("ability", value);  // apply filter
+                    }
+                }}
+            >
+                <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Abilities" />
+                </SelectTrigger>
+
+                <SelectContent className="max-h-48 overflow-y-auto">
+                    <SelectItem value="all">All</SelectItem>
+
+                    {pokemonAbilities.map((item: string) => (
+                        <SelectItem key={item} value={item}>
+                            {formatStatName(item)}
+                        </SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+        </div>
+    );
+};
+
+export default PokemonFilterAbilities;

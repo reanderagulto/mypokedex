@@ -194,13 +194,11 @@ export const usePokemonStore = create<PokemonStore>((set, get) => ({
         const { filters, mergedPokemon } = get();
         let result: PokemonMerged[] = [];
 
-        // ========== TYPE + ABILITY ==========
         if (filters.type && filters.ability) {
             const typeList = await getPokemonByType(filters.type);
             const abilityList = await getPokemonByAbility(filters.ability);
             const abilityNames = new Set(abilityList.map(p => p.name));
 
-            // intersect by name
             result = typeList
                 .filter(p => abilityNames.has(p.name))
                 .map(p => ({
@@ -210,7 +208,6 @@ export const usePokemonStore = create<PokemonStore>((set, get) => ({
                 }));
         }
 
-        // ========== TYPE ONLY ==========
         else if (filters.type) {
             const typeList = await getPokemonByType(filters.type);
             result = typeList.map(p => ({
@@ -220,7 +217,6 @@ export const usePokemonStore = create<PokemonStore>((set, get) => ({
             }));
         }
 
-    // ========== ABILITY ONLY ==========
         else if (filters.ability) {
             const abilityList = await getPokemonByAbility(filters.ability);
             result = abilityList.map(p => ({

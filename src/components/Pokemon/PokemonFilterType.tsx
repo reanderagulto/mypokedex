@@ -1,3 +1,6 @@
+import {
+    useState
+} from 'react';
 import { usePokemonStore } from '@lib/usePokemonStore';
 import {
     titleCase
@@ -13,6 +16,8 @@ const PokemonFilterType = () => {
         setFilter
     } = usePokemonStore();
 
+    const [activeItem, setActiveItem] = useState('');
+
     return (
         <div>
             <label className="block mb-3 font-semibold text-sm text-[#000]">Types</label>
@@ -20,8 +25,11 @@ const PokemonFilterType = () => {
                 {pokemonTypes?.map((item: any, index: any) => (
                     <Badge 
                         key={index}
-                        className={`w-[calc(50%-12px)] h-[32px] flex-grow cursor-pointer ${typeColors[item]}`}
-                        onClick={() => { setFilter("type", item);}}
+                        className={`w-[calc(50%-12px)] h-[32px] flex-grow cursor-pointer ${typeColors[item]} ${activeItem == item ? 'border-[2px] border-black': ''}`}
+                        onClick={() => { 
+                            setFilter("type", item);
+                            setActiveItem(item);
+                        }}
                     >
                         {titleCase(item)}
                     </Badge>

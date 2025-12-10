@@ -19,8 +19,13 @@ import {
 } from '../ui/input-group';
 import PokemonFilterAbilities from '../Pokemon/PokemonFilterAbilities';
 import PokemonFilterType from '../Pokemon/PokemonFilterType';
+import { usePokemonStore } from '@lib/usePokemonStore';
 
 const SiteHeader = () => {
+    const { 
+        setFilter
+    } = usePokemonStore();
+
     return (
         <header>
             <div className="header__inner-wrapper">
@@ -34,7 +39,11 @@ const SiteHeader = () => {
                 <div className="header__menu">
                     <div className="header__search">
                         <InputGroup>
-                            <InputGroupInput placeholder="Search" className="text-white placeholder:text-white" />
+                            <InputGroupInput 
+                                placeholder="Search" 
+                                className="text-white placeholder:text-white" 
+                                onChange={(e) => setFilter("name", e.target.value)}
+                            />
                             <InputGroupAddon>
                                 <Search stroke="#fff"/>
                             </InputGroupAddon>

@@ -25,12 +25,12 @@ const PokemonFilterAbilities = () => {
             </label>
 
             <Select
-                value={filters.ability ?? "all"}   // 🔥 keeps Select in sync with Zustand
+                value={filters.ability ?? "all"}
                 onValueChange={(value) => {
                     if (value === "all") {
-                        setFilter("ability", null);   // clear filter
+                        setFilter("ability", null);
                     } else {
-                        setFilter("ability", value);  // apply filter
+                        setFilter("ability", value);
                     }
                 }}
             >

@@ -17,8 +17,6 @@ const PokemonList = () => {
         filters.type !== null ||
         filters.ability !== null;
 
-    console.log(filteredPokemon);
-
     const list = isFiltering ? filteredPokemon : allPokemon.data;
 
     const loadMore = () => {

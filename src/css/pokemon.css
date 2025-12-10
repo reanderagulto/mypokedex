@@ -1,11 +1,11 @@
 @reference './global.css';
 
 .pokemon-list {
-    @apply flex items-stretch flex-wrap justify-between gap-[32px] w-[80%] max-w-[900px] mx-auto mt-[65px] mb-[65px];
+    @apply flex items-stretch flex-wrap gap-[32px] w-[80%] max-w-[900px] mx-auto mt-[65px] mb-[65px];
 }
 
 .pokemon-card {
-    @apply relative md:w-[calc(calc(100%/3)-32px)] w-full flex flex-col flex-grow cursor-pointer transition-all;
+    @apply relative md:w-[calc(calc(100%/3)-22px)] w-full flex flex-col cursor-pointer transition-all;
 }
 
 .pokemon-card:hover {

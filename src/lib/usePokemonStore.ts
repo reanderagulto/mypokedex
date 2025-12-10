@@ -4,7 +4,9 @@ import {
     getAllGeneration,
     getPokemonByName,
     getPokemonTypes,
-    getPokemonAbilities
+    getPokemonAbilities,
+    getPokemonByType,
+    getPokemonByAbility
 } from "@api/api";
 
 const CACHE_TTL = 1000 * 60 * 10;
@@ -39,13 +41,9 @@ type PokemonStore = {
     pokemonTypes: string[];
     pokemonAbilities: string[];
 
-    typeMap: Record<string, string[]>;
-    abilityMap: Record<string, string[]>;
     mergedPokemon: PokemonMerged[];
     filteredPokemon: PokemonMerged[];
     filters: Filters;
-
-    isReadyToMerge: () => boolean;
 
     fetchAllPokemon: (offset?: number) => Promise<void>;
     fetchAllGenerations: () => Promise<void>;
@@ -53,7 +51,6 @@ type PokemonStore = {
     fetchPokemonTypes: () => Promise<void>;
     fetchPokemonAbilities: () => Promise<void>;
 
-    mergePokemonData: () => void;
     setFilter: (key: keyof Filters, value: string | null) => void;
     applyFilters: () => void;
 };
@@ -68,19 +65,13 @@ export const usePokemonStore = create<PokemonStore>((set, get) => ({
     pokemonTypes: [],
     pokemonAbilities: [],
 
-    typeMap: {},
-    abilityMap: {},
     mergedPokemon: [],
     filteredPokemon: [],
     filters: { name: "", type: null, ability: null },
 
-    isReadyToMerge: () => {
-        const { allPokemon, typeMap, abilityMap } = get();
-        return allPokemon.data.length > 0 && Object.keys(typeMap).length > 0 && Object.keys(abilityMap).length > 0
-        ;
-    },
-
+    // ===========================
     // Fetch Pokémon list
+    // ===========================
     fetchAllPokemon: async (offset = 0) => {
         const key = `pokemon-list-${LIMIT}-${offset}`;
         const cached = get().cache[key];
@@ -92,29 +83,30 @@ export const usePokemonStore = create<PokemonStore>((set, get) => ({
                 ...cached.data.data.filter(p => !prev.some(old => old.name === p.name))
             ];
             set({ allPokemon: { ...cached.data, data: mergedData } });
-            if (get().isReadyToMerge()) get().mergePokemonData();
             return;
         }
 
         set({ loading: true });
         const data = await getAllPokemon(LIMIT, offset);
 
-        // Deduplicate as we append
         const prevData = get().allPokemon.data;
         const mergedData = [
             ...prevData,
             ...data.data.filter(p => !prevData.some(old => old.name === p.name))
         ];
 
+        get().mergedPokemon = mergedData;
+
         set({
             allPokemon: { ...data, data: mergedData },
             loading: false,
             cache: { ...get().cache, [key]: { data, timestamp: Date.now() } }
-        });
-
-        if (get().isReadyToMerge()) get().mergePokemonData();
+        });        
     },
 
+    // ===========================
+    // Generations
+    // ===========================
     fetchAllGenerations: async () => {
         const key = "generations";
         const cached = get().cache[key];
@@ -131,6 +123,9 @@ export const usePokemonStore = create<PokemonStore>((set, get) => ({
         });
     },
 
+    // ===========================
+    // Pokémon Details by Name
+    // ===========================
     fetchPokemonByName: async (name: string) => {
         const key = `pokemon-${name}`;
         const cached = get().cache[key];
@@ -145,112 +140,106 @@ export const usePokemonStore = create<PokemonStore>((set, get) => ({
         return data;
     },
 
+    // ===========================
+    // Pokémon Types
+    // ===========================
     fetchPokemonTypes: async () => {
         const key = "types";
         const cached = get().cache[key];
+
         if (cached) {
             set({ pokemonTypes: cached.data });
-            if (get().isReadyToMerge()) get().mergePokemonData();
             return;
         }
 
         const data = await getPokemonTypes();
-        const typeMap: Record<string, string[]> = {};
-
-        await Promise.all(
-            data.results.map(async (t: any) => {
-                const detail = await fetch(t.url).then(r => r.json());
-                typeMap[t.name] = detail.pokemon.map((p: any) => p.pokemon.name);
-            })
-        );
+        const list = data.results.map((t: any) => t.name);
 
         set({
-            pokemonTypes: data.results.map((t: any) => t.name),
-            typeMap,
-            cache: { ...get().cache, [key]: { data, timestamp: Date.now() } }
+            pokemonTypes: list,
+            cache: { ...get().cache, [key]: { data: list, timestamp: Date.now() } }
         });
-
-        if (get().isReadyToMerge()) get().mergePokemonData();
     },
 
+    // ===========================
+    // Pokémon Abilities
+    // ===========================
     fetchPokemonAbilities: async () => {
         const key = "abilities";
         const cached = get().cache[key];
+
         if (cached) {
-            set({ pokemonAbilities: cached.data });
-            if (get().isReadyToMerge()) get().mergePokemonData();
+            set({ pokemonAbilities: cached.data });            
             return;
         }
 
         const data = await getPokemonAbilities();
-        const abilityMap: Record<string, string[]> = {};
-
-        await Promise.all(
-            data.results.map(async (a: any) => {
-                const detail = await fetch(a.url).then(r => r.json());
-                abilityMap[a.name] = detail.pokemon.map((p: any) => p.pokemon.name);
-            })
-        );
-
-        const resultData = data.results.map((a: any) => a.name).sort();
+        const list = data.results.map((a: any) => a.name).sort();
 
         set({
-            pokemonAbilities: resultData,
-            abilityMap,
-            cache: { ...get().cache, [key]: { data, timestamp: Date.now() } }
-        });
-
-        if (get().isReadyToMerge()) get().mergePokemonData();
-    },
-
-    // Merge all data into mergedPokemon with IDs and images
-    mergePokemonData: () => {
-        const { allPokemon, typeMap, abilityMap } = get();
-        if (!get().isReadyToMerge()) return;
-
-        const merged: PokemonMerged[] = allPokemon.data.map((p: any) => {
-            const name = p.name;
-            const id = p.url.split("/").filter(Boolean).pop();
-
-            const mapToKeys = (map: Record<string, string[]>) =>
-                Object.entries(map)
-                    .filter(([_, list]) => list.includes(name))
-                    .map(([key]) => key);
-
-            return {
-                id,
-                name,
-                image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`,
-                types: mapToKeys(typeMap),
-                abilities: mapToKeys(abilityMap)
-            };
-        });
-
-        // Deduplicate by name
-        const uniqueMerged = Array.from(new Map(merged.map(p => [p.name, p])).values());
-
-        set({
-            mergedPokemon: uniqueMerged,
-            filteredPokemon: uniqueMerged
+            pokemonAbilities: list,
+            cache: { ...get().cache, [key]: { data: list, timestamp: Date.now() } }
         });
     },
 
+    // ===========================
+    // Filters
+    // ===========================
     setFilter: (key, value) => {
         set(state => ({ filters: { ...state.filters, [key]: value } }));
         get().applyFilters();
     },
+    
+    applyFilters: async () => {
+        const { filters, mergedPokemon } = get();
+        let result: PokemonMerged[] = [];
 
-    applyFilters: () => {
-        const { mergedPokemon, filters } = get();
-        const result = mergedPokemon.filter(p => {
-            const matchName =
-                !filters.name || p.name.toLowerCase().includes(filters.name.toLowerCase());
-            const matchType = !filters.type || p.types.includes(filters.type);
-            const matchAbility = !filters.ability || p.abilities.includes(filters.ability);
-            return matchName && matchType && matchAbility;
-        });
+        // ========== TYPE + ABILITY ==========
+        if (filters.type && filters.ability) {
+            const typeList = await getPokemonByType(filters.type);
+            const abilityList = await getPokemonByAbility(filters.ability);
+            const abilityNames = new Set(abilityList.map(p => p.name));
+
+            // intersect by name
+            result = typeList
+                .filter(p => abilityNames.has(p.name))
+                .map(p => ({
+                    ...p,
+                    types: [],
+                    abilities: []
+                }));
+        }
+
+        // ========== TYPE ONLY ==========
+        else if (filters.type) {
+            const typeList = await getPokemonByType(filters.type);
+            result = typeList.map(p => ({
+                ...p,
+                types: [],
+                abilities: []
+            }));
+        }
+
+    // ========== ABILITY ONLY ==========
+        else if (filters.ability) {
+            const abilityList = await getPokemonByAbility(filters.ability);
+            result = abilityList.map(p => ({
+                ...p,
+                types: [],
+                abilities: []
+            }));
+        }
+
+        else {
+            result = mergedPokemon;
+        }
+
+        if (filters.name) {
+            result = result.filter(p =>
+                p.name.toLowerCase().includes(filters.name.toLowerCase())
+            );
+        }
+
         set({ filteredPokemon: result });
     }
-    
-    
 }));

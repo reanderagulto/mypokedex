@@ -36,7 +36,11 @@ export const getPokemonByType = async (type: string) => {
         const id = url.split("/")[url.split("/").length - 2];
         const image = `${spriteUrl}/${id}.png`;
 
-        return { id, name: p.pokemon.name, image };
+        return { 
+            id, 
+            name: p.pokemon.name,
+            image
+        };
     });
 };
 
@@ -48,7 +52,11 @@ export const getPokemonByAbility = async (ability: string) => {
         const id = url.split("/")[url.split("/").length - 2];
         const image = `${spriteUrl}/${id}.png`;
 
-        return { id, name: p.pokemon.name, image };
+        return { 
+            id, name: 
+            p.pokemon.name, 
+            image 
+        };
     });
 };
 
